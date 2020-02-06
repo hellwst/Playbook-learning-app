@@ -1,5 +1,5 @@
 -
-  name: 'Install and configure FirewallD'
+  name: 'Install and configure Kodecloud service'
   hosts: target1
   tasks:
     -
@@ -18,14 +18,6 @@
         name: firewalld
         enabled: yes
     -
-      name: 'Show the status of firewallD service and save the output to resultF'
-      command: service firewalld status
-      register: resultF
-    -
-      name: 'Check if the service firewalld is not running and print the message to stdout'
-      command: 'echo "Service is not active"'
-      when: resultF.stdout.find('inactive') != -1
-    -
       name: 'Install mariaDB'
       apt:
         name: mariadb-server
@@ -40,16 +32,6 @@
       systemd:
         name: mariadb
         enabled: yes
-    -
-      name: 'Show the status of mariadb service and save the output to resultF'
-      command: sudo service mariadb status
-      register: resultM
-    -
-      name: 'Check if the service mariadb is running and print the message to stdout'
-      command: 'echo "Mariadb serice is not running"'
-      when: resultM.stdout.find('inactive') != -1
-      command: 'echo "Mariadb serice is running"'
-      when: resultM.stdout.find('active') != -1
     -
       name: 'Configure firewalld for database'
       command: firewall-cmd --permanent --zone=public --add-port=3306/tcp
